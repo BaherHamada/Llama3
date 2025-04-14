@@ -1,8 +1,15 @@
-import os
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from flask import Flask, request, jsonify
 
-token = os.getenv("HUGGINGFACE_TOKEN")
-model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
+app = Flask(__name__)
 
-tokenizer = AutoTokenizer.from_pretrained(model_id, use_auth_token=token)
-model = AutoModelForCausalLM.from_pretrained(model_id, use_auth_token=token)
+@app.route('/generate', methods=['POST'])
+def generate():
+    data = request.get_json()
+    prompt = data.get('prompt', '')
+    output = f"Mock response for: {prompt}"
+    return jsonify({'response': output})
+
+if __name__ == '__main__':
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
